@@ -1,7 +1,3 @@
-// This file is a Backbone Model (don't worry about what that means)
-// It's part of the Board Visualizer
-// The only portions you need to work on are the helper functions (below)
-
 (function() {
 
   window.Board = Backbone.Model.extend({
@@ -68,7 +64,6 @@
     / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
     \__ \ || (_| | |  | |_  | | | |  __/ | |  __/_
     |___/\__\__,_|_|   \__| |_| |_|\___|_|  \___(_)
-
  */
     /*=========================================================================
     =                 TODO: fill in these Helper Functions                    =
@@ -104,12 +99,11 @@
       return false; // fixme
     },
 
-
-
     // COLUMNS - run from top to bottom
     // --------------------------------------------------------------
     //
     // test if a specific column on this board contains a conflict
+
     hasColConflictAt: function(colIndex) {
       var matrix = this.rows();
       // create counter
@@ -131,9 +125,9 @@
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      var innerArray = this.rows()[0];
+      var innerArray = this.rows().length;
       // iterate through inner array
-      for (var i = 0; i < innerArray.length; i++) {
+      for (var i = 0; i < innerArray; i++) {
         // call hasColConflictAt on each index of inner array
         if (this.hasColConflictAt(i)) {
           return true;
@@ -165,6 +159,7 @@
       return false;
     },
 
+
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
       //[0][(matrix.length * -1 ) + 1]
@@ -179,7 +174,6 @@
       }
       return false;
     },
-
 
 
     // Minor Diagonals - go from top-right to bottom-left
@@ -222,7 +216,6 @@
 
 
   });
-
   var makeEmptyMatrix = function(n) {
     return _(_.range(n)).map(function() {
       return _(_.range(n)).map(function() {
