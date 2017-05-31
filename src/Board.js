@@ -1,5 +1,8 @@
-(function() {
+// This file is a Backbone Model (don't worry about what that means)
+// It's part of the Board Visualizer
+// The only portions you need to work on are the helper functions (below)
 
+(function() {
   window.Board = Backbone.Model.extend({
 
     initialize: function (params) {
@@ -64,6 +67,7 @@
     / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
     \__ \ || (_| | |  | |_  | | | |  __/ | |  __/_
     |___/\__\__,_|_|   \__| |_| |_|\___|_|  \___(_)
+
  */
     /*=========================================================================
     =                 TODO: fill in these Helper Functions                    =
@@ -73,62 +77,56 @@
     // --------------------------------------------------------------
     //
     // test if a specific row on this board contains a conflict
+
     hasRowConflictAt: function(rowIndex) {
-      var searchRow = this.rows()[rowIndex];
+      var matrix = this.rows();
       var counter = 0;
-      for (var j = 0; j < searchRow.length; j++) {
-        if (searchRow[j] === 1) {
+
+      for (var i = 0; i < this.get('n'); i++) {
+        if(matrix[rowIndex][i] === 1) {
           counter++;
         }
-        if (counter > 1) {
+        if(counter > 1) {
           return true;
         }
       }
-      return false; // fixme
+      return false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      var matrix = this.rows();
-      // iterate through all rows
-      for (var i = 0; i < matrix.length; i++) {
-        if (this.hasRowConflictAt(i)) {
+      for (var i = 0; i < this.get('n'); i++) {
+        if(this.hasRowConflictAt(i)) {
           return true;
         }
       }
-      return false; // fixme
+      return false;
     },
+
+
 
     // COLUMNS - run from top to bottom
     // --------------------------------------------------------------
     //
     // test if a specific column on this board contains a conflict
-
     hasColConflictAt: function(colIndex) {
       var matrix = this.rows();
-      // create counter
       var counter = 0;
-      // iterate through each array in matrix
-      for (var i = 0; i < matrix.length; i++) {
-      // if item at colIndex in row === 1
+
+      for (var i = 0; i < this.get('n'); i++) {
         if (matrix[i][colIndex] === 1) {
-          // add to counter
           counter++;
         }
         if (counter > 1) {
-          // if counter > 1
           return true;
         }
       }
-      return false; // fixme
+      return false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      var innerArray = this.rows().length;
-      // iterate through inner array
-      for (var i = 0; i < innerArray; i++) {
-        // call hasColConflictAt on each index of inner array
+      for (var i = 0; i < this.get('n'); i++) {
         if (this.hasColConflictAt(i)) {
           return true;
         }
@@ -146,9 +144,8 @@
       var matrix = this.rows();
       var counter = 0;
 
-      //[0], [i]--> [array.length - 1][1]
-      for (var i = 0; i < matrix.length; i++) {
-        if (matrix[i][majorDiagonalColumnIndexAtFirstRow] === 1) {
+      for (var i = 0; i < this.get('n'); i++) {
+        if(matrix[i][majorDiagonalColumnIndexAtFirstRow] === 1) {
           counter++;
         }
         if (counter > 1) {
@@ -159,21 +156,16 @@
       return false;
     },
 
-
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      //[0][(matrix.length * -1 ) + 1]
-      var matrix = this.rows();
-      // variable for initial column
-      var currentCol = (matrix.length * -1) + 1;
-      // iterate through each array in matrix
-      for (var i = currentCol; i < matrix.length - 1; i++) {
+      for (var i = -(this.get('n')) +1; i < this.get('n'); i++) {
         if (this.hasMajorDiagonalConflictAt(i)) {
           return true;
         }
       }
       return false;
     },
+
 
 
     // Minor Diagonals - go from top-right to bottom-left
@@ -184,27 +176,20 @@
       var matrix = this.rows();
       var counter = 0;
 
-      //[0], [i]--> [array.length - 1][1]
-      for (var i = 0; i < matrix.length; i++) {
-        if (matrix[i][minorDiagonalColumnIndexAtFirstRow] === 1) {
+      for (var i = 0; i < this.get('n'); i++) {
+        if (matrix[i][minorDiagonalColumnIndexAtFirstRow - i] === 1) {
           counter++;
         }
         if (counter > 1) {
           return true;
         }
-        minorDiagonalColumnIndexAtFirstRow--;
       }
       return false;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-     //[0][(matrix.length * -1 ) + 1]
-      var matrix = this.rows();
-      // variable for initial column
-      var currentCol = (matrix.length * 2) - 1;
-      // iterate through each array in matrix
-      for (var i = currentCol; i > (matrix.length * -1) + 1; i--) {
+      for (var i = 0; i < (2 * this.get('n') -1); i++) {
         if (this.hasMinorDiagonalConflictAt(i)) {
           return true;
         }
@@ -216,6 +201,7 @@
 
 
   });
+
   var makeEmptyMatrix = function(n) {
     return _(_.range(n)).map(function() {
       return _(_.range(n)).map(function() {
